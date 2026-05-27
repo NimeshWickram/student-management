@@ -243,7 +243,7 @@
                     <label for="password" class="form-label">Password</label>
                     <div class="input-wrapper">
                         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                        <input type="password" name="password" id="password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+                        <input type="password" name="password" id="password" class="form-input" placeholder="Enter your password" required autocomplete="current-password">
                     </div>
                 </div>
 
@@ -265,7 +265,7 @@
             <div class="demo-credentials">
                 🔑 <strong>Quick Test Credentials:</strong><br>
                 Use the email of any student in the system.<br>
-                Password: <strong>student123</strong>
+                Password: <strong>enter your password</strong> (default: <strong>student123</strong>)
             </div>
         </div>
 
