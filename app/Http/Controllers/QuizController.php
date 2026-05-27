@@ -63,7 +63,7 @@ class QuizController extends Controller
             'subject_id' => 'required|exists:subjects,id',
             'title' => 'required|string|max:255',
             'quiz_type' => 'required|in:manual_mcq,pdf_mcq',
-            'grade' => 'required|in:Grade 9,Grade 10',
+            'grade' => 'required|in:Grade 1,Grade 2,Grade 3,Grade 4,Grade 5,Grade 6,Grade 7,Grade 8,Grade 9,Grade 10,Grade 11',
         ];
 
         if ($request->input('quiz_type') === 'manual_mcq') {

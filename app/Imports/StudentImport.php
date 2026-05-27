@@ -91,15 +91,14 @@ class StudentImport
             // Assign tenant_id and normalize grade
             $data['tenant_id'] = $this->tenantId;
             if (empty($data['grade'])) {
-                $data['grade'] = 'Grade 9';
+                $data['grade'] = 'Grade 1';
             } else {
                 $gradeVal = strtolower(trim($data['grade']));
-                if (str_contains($gradeVal, '9')) {
-                    $data['grade'] = 'Grade 9';
-                } elseif (str_contains($gradeVal, '10')) {
-                    $data['grade'] = 'Grade 10';
+                preg_match('/(1[0-1]|[1-9])/', $gradeVal, $matches);
+                if (!empty($matches[0])) {
+                    $data['grade'] = 'Grade ' . $matches[0];
                 } else {
-                    $data['grade'] = 'Grade 9';
+                    $data['grade'] = 'Grade 1';
                 }
             }
 
@@ -169,7 +168,7 @@ class StudentImport
                 'email'        => trim($row[$offset + 2] ?? ''),
                 'phone_number' => trim($row[$offset + 3] ?? ''),
                 'course'       => trim($row[$offset + 4] ?? ''),
-                'grade'        => trim($row[$offset + 5] ?? 'Grade 9'),
+                'grade'        => trim($row[$offset + 5] ?? 'Grade 1'),
             ];
         }
 

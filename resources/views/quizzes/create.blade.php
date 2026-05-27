@@ -144,9 +144,10 @@
                     <label for="grade" class="text-xs font-bold uppercase tracking-wider text-black">Target Grade <span class="text-red-500">*</span></label>
                     <div class="relative">
                         <select name="grade" id="grade" required class="w-full px-3.5 py-3 text-sm border-2 border-gray-200 rounded focus:border-black focus:outline-none transition duration-200 bg-white appearance-none font-medium text-gray-800">
-                            <option value="" disabled selected>Select a grade...</option>
-                            <option value="Grade 9" {{ old('grade') == 'Grade 9' ? 'selected' : '' }}>Grade 9</option>
-                            <option value="Grade 10" {{ old('grade') == 'Grade 10' ? 'selected' : '' }}>Grade 10</option>
+                             <option value="" disabled selected>Select a grade...</option>
+                             @for($i = 1; $i <= 11; $i++)
+                                 <option value="Grade {{ $i }}" {{ old('grade') == "Grade $i" ? 'selected' : '' }}>Grade {{ $i }}</option>
+                             @endfor
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none border-l-2 border-gray-200">
                             <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
