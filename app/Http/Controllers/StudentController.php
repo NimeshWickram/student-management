@@ -115,9 +115,16 @@ class StudentController extends Controller
             'phone_number' => ['required', 'string', 'regex:/^(0[0-9]{9}|[1-9][0-9]{8})$/'],
             'course'       => 'required|string|max:255',
             'grade'        => 'required|string|max:255',
+            'password'     => 'nullable|string|min:6',
         ]);
 
         $validated['tenant_id'] = $this->getActiveTenantId();
+
+        if (!empty($validated['password'])) {
+            $validated['password'] = bcrypt($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
 
         Student::create($validated);
 
@@ -146,7 +153,14 @@ class StudentController extends Controller
             'phone_number' => ['required', 'string', 'regex:/^(0[0-9]{9}|[1-9][0-9]{8})$/'],
             'course'       => 'required|string|max:255',
             'grade'        => 'required|string|max:255',
+            'password'     => 'nullable|string|min:6',
         ]);
+
+        if (!empty($validated['password'])) {
+            $validated['password'] = bcrypt($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
 
         $student->update($validated);
 
