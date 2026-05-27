@@ -43,7 +43,8 @@ Route::post('subjects/import', [SubjectController::class, 'import'])->name('subj
 Route::resource('subjects', SubjectController::class)->except(['create', 'show', 'edit']);
 
 // Quizzes
-Route::resource('quizzes', App\Http\Controllers\QuizController::class)->only(['index', 'create', 'store']);
+Route::post('quizzes/parse-pdf', [App\Http\Controllers\QuizController::class, 'parsePdf'])->name('quizzes.parse-pdf');
+Route::resource('quizzes', App\Http\Controllers\QuizController::class);
 
 // Student Routes
 Route::prefix('student')->name('student.')->group(function () {

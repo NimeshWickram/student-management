@@ -141,24 +141,35 @@
                             {{ $quiz->created_at->format('d M Y') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <div class="flex items-center gap-2">
+                            <div class="flex flex-wrap items-center gap-2">
                                 @if($isManualMcq)
-                                    <button type="button" onclick="showQuizContent({{ json_encode($quiz->title) }}, {{ json_encode($quiz->manual_content) }})" class="inline-flex items-center px-3.5 py-1.5 text-xs font-bold uppercase border-2 border-black bg-white text-black hover:bg-black hover:text-white transition duration-150">
-                                        <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                                        View Questions
+                                    <button type="button" onclick="showQuizContent({{ json_encode($quiz->title) }}, {{ json_encode($quiz->manual_content) }})" class="inline-flex items-center px-3 py-1 text-xs font-bold uppercase border-2 border-black bg-white text-black hover:bg-black hover:text-white transition duration-150">
+                                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                        View
                                     </button>
                                     @if($quiz->pdf_file_path)
-                                        <a href="{{ Storage::url($quiz->pdf_file_path) }}" target="_blank" class="inline-flex items-center px-3.5 py-1.5 text-xs font-bold uppercase border-2 border-black bg-black text-white hover:bg-white hover:text-black transition duration-150">
-                                            <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                                            Original PDF
+                                        <a href="{{ Storage::url($quiz->pdf_file_path) }}" target="_blank" class="inline-flex items-center px-3 py-1 text-xs font-bold uppercase border-2 border-gray-600 bg-white text-gray-700 hover:bg-gray-600 hover:text-white transition duration-150">
+                                            PDF
                                         </a>
                                     @endif
                                 @else
-                                    <a href="{{ Storage::url($quiz->pdf_file_path) }}" target="_blank" class="inline-flex items-center px-3.5 py-1.5 text-xs font-bold uppercase border-2 border-black bg-black text-white hover:bg-white hover:text-black transition duration-150">
-                                        <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                    <a href="{{ Storage::url($quiz->pdf_file_path) }}" target="_blank" class="inline-flex items-center px-3 py-1 text-xs font-bold uppercase border-2 border-gray-600 bg-white text-gray-700 hover:bg-gray-600 hover:text-white transition duration-150">
                                         Open PDF
                                     </a>
                                 @endif
+
+                                <a href="{{ route('quizzes.edit', $quiz) }}" class="inline-flex items-center px-3 py-1 text-xs font-bold uppercase border-2 border-amber-500 bg-white text-amber-700 hover:bg-amber-500 hover:text-white transition duration-150">
+                                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                    Edit
+                                </a>
+
+                                <form action="{{ route('quizzes.destroy', $quiz) }}" method="POST" class="delete-quiz-form inline-block">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="inline-flex items-center px-3 py-1 text-xs font-bold uppercase border-2 border-red-500 bg-white text-red-600 hover:bg-red-500 hover:text-white transition duration-150">
+                                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                        Delete
+                                    </button>
+                                </form>
                             </div>
                         </td>
                     </tr>
@@ -306,6 +317,27 @@
         if (event.target === this) {
             closeQuizModal();
         }
+    });
+
+    // Delete confirmation handler
+    document.querySelectorAll('.delete-quiz-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var f = this;
+            Swal.fire({
+                title: 'Delete this MCQ Quiz?',
+                text: 'Are you sure you want to permanently delete this quiz?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#737373',
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function(r) {
+                if (r.isConfirmed) {
+                    f.submit();
+                }
+            });
+        });
     });
 </script>
 @endsection

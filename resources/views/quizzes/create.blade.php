@@ -59,7 +59,7 @@
 @endsection
 
 @section('content')
-<div class="max-w-4xl mx-auto" x-data="{ 
+<div class="max-w-4xl mx-auto" id="quiz-app" x-data="{ 
     quizType: '{{ old('quiz_type', 'manual_mcq') }}',
     questions: [
         { question: '', options: ['', '', '', ''], correct_option: 0 }
@@ -78,8 +78,7 @@
                 confirmButtonColor: '#0a0a0a'
             });
         }
-    }
-}">
+}" @parse-completed.window="questions = $event.detail.questions; quizType = 'manual_mcq'">
     <!-- Header -->
     <div class="flex items-center justify-between pb-4 mb-6 border-b border-gray-200">
         <div>
@@ -298,8 +297,64 @@
                 display.className = 'text-xs text-gray-500 mt-2 font-medium';
                 return;
             }
+
             display.innerHTML = `Selected File: <strong class="text-black font-bold font-mono">${file.name}</strong> (${(file.size / (1024 * 1024)).toFixed(2)} MB)`;
             display.className = 'text-xs text-green-700 mt-2 font-medium bg-green-50 border border-green-200 px-3 py-1 rounded';
+
+            // Automatic MCQ Extraction & Preview
+            Swal.fire({
+                title: 'Parsing MCQ PDF...',
+                text: 'Extracting questions and options. Please wait.',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: function() {
+                    Swal.showLoading();
+                }
+            });
+
+            const formData = new FormData();
+            formData.append('pdf_file', file);
+            formData.append('_token', '{{ csrf_token() }}');
+
+            fetch('{{ route("quizzes.parse-pdf") }}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw new Error(err.error || 'Failed to parse PDF.'); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success && data.questions) {
+                    // Dispatch custom window event to Alpine container to populate questions
+                    const event = new CustomEvent('parse-completed', {
+                        detail: { questions: data.questions }
+                    });
+                    window.dispatchEvent(event);
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Extraction Complete!',
+                        text: 'Successfully extracted ' + data.questions.length + ' questions from the PDF. You can now preview and edit them below.',
+                        confirmButtonColor: '#0a0a0a'
+                    });
+                } else {
+                    throw new Error(data.error || 'Failed to parse PDF.');
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Parsing Failed',
+                    text: error.message || 'Make sure the PDF contains Q1. [Question] style format.',
+                    confirmButtonColor: '#0a0a0a'
+                });
+                input.value = '';
+                display.innerHTML = 'Accepts only .PDF documents (max 10MB)';
+                display.className = 'text-xs text-gray-500 mt-2 font-medium';
+            });
         } else {
             display.innerHTML = 'Accepts only .PDF documents (max 10MB)';
             display.className = 'text-xs text-gray-500 mt-2 font-medium';

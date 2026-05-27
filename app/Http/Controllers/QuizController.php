@@ -237,6 +237,96 @@ class QuizController extends Controller
             ];
         }
         
-        return $questions;
+    /**
+     * Parse uploaded PDF to JSON array of MCQs for frontend preview.
+     */
+    public function parsePdf(Request $request)
+    {
+        $request->validate([
+            'pdf_file' => 'required|file|mimes:pdf|max:10240',
+        ]);
+
+        try {
+            $pdfParser = new PdfParser();
+            $pdf = $pdfParser->parseFile($request->file('pdf_file')->path());
+            $text = $pdf->getText();
+            $questions = $this->parseMcqsFromText($text);
+
+            if (empty($questions)) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'No readable multiple choice questions found in the PDF. Please ensure it follows standard format Q1. [Question] A) B) C) D).'
+                ], 422);
+            }
+
+            return response()->json([
+                'success' => true,
+                'questions' => $questions
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Error parsing PDF: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Show the form for editing the specified quiz.
+     */
+    public function edit(Quiz $quiz)
+    {
+        $tenantId = $this->getActiveTenantId();
+        $teachers = Teacher::where('tenant_id', $tenantId)->get();
+        $subjects = Subject::where('tenant_id', $tenantId)->get();
+        
+        return view('quizzes.edit', compact('quiz', 'teachers', 'subjects'));
+    }
+
+    /**
+     * Update the specified quiz in storage.
+     */
+    public function update(Request $request, Quiz $quiz)
+    {
+        $validated = $request->validate([
+            'teacher_id' => 'required|exists:teachers,id',
+            'subject_id' => 'required|exists:subjects,id',
+            'title' => 'required|string|max:255',
+            'grade' => 'required|in:Grade 1,Grade 2,Grade 3,Grade 4,Grade 5,Grade 6,Grade 7,Grade 8,Grade 9,Grade 10,Grade 11',
+            'manual_content' => 'required|string',
+        ]);
+
+        $questions = json_decode($validated['manual_content'], true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($questions) || empty($questions)) {
+            return back()->withErrors(['manual_content' => 'Invalid MCQ quiz questions structure.'])->withInput();
+        }
+
+        foreach ($questions as $index => $q) {
+            if (empty($q['question']) || !isset($q['options']) || !is_array($q['options']) || count($q['options']) < 2) {
+                return back()->withErrors(['manual_content' => "Question " . ($index + 1) . " must contain a question text and at least 2 options."])->withInput();
+            }
+            if (!isset($q['correct_option']) || $q['correct_option'] < 0 || $q['correct_option'] >= count($q['options'])) {
+                return back()->withErrors(['manual_content' => "Question " . ($index + 1) . " must have a valid correct option selected."])->withInput();
+            }
+        }
+
+        $quiz->update([
+            'teacher_id' => $validated['teacher_id'],
+            'subject_id' => $validated['subject_id'],
+            'title' => $validated['title'],
+            'grade' => $validated['grade'],
+            'manual_content' => $validated['manual_content'],
+        ]);
+
+        return redirect()->route('quizzes.index')->with('success', 'Quiz updated successfully.');
+    }
+
+    /**
+     * Remove the specified quiz from storage.
+     */
+    public function destroy(Quiz $quiz)
+    {
+        $quiz->delete();
+        return redirect()->route('quizzes.index')->with('success', 'Quiz deleted successfully.');
     }
 }
