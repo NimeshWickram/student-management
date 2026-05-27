@@ -180,7 +180,8 @@ class QuizController extends Controller
         $answerRegex = '/^(?:Answer|Correct|Ans|Key)[\s\:\-]*([a-d])/i';
         
         foreach ($lines as $line) {
-            $line = trim($line);
+            // Remove zero-width spaces, BOMs, and non-breaking spaces
+            $line = trim(preg_replace('/[\x{200B}-\x{200D}\x{FEFF}\x{00A0}]/u', '', $line));
             if (empty($line)) continue;
             
             // Check if it matches an answer pattern
@@ -219,9 +220,14 @@ class QuizController extends Controller
                 continue;
             }
             
-            // Otherwise, append text to current question description if no options collected yet
-            if ($currentQuestion !== null && empty($currentOptions)) {
-                $currentQuestion .= " " . $line;
+            // Otherwise, append text to current question description if no options yet, or to last option
+            if ($currentQuestion !== null) {
+                if (empty($currentOptions)) {
+                    $currentQuestion .= " " . $line;
+                } else {
+                    $lastIndex = count($currentOptions) - 1;
+                    $currentOptions[$lastIndex] .= " " . $line;
+                }
             }
         }
         
