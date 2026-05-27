@@ -237,6 +237,9 @@ class QuizController extends Controller
             ];
         }
         
+        return $questions;
+    }
+
     /**
      * Parse uploaded PDF to JSON array of MCQs for frontend preview.
      */
