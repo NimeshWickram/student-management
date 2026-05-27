@@ -78,6 +78,7 @@
                 confirmButtonColor: '#0a0a0a'
             });
         }
+    }
 }" @parse-completed.window="questions = $event.detail.questions; quizType = 'manual_mcq'">
     <!-- Header -->
     <div class="flex items-center justify-between pb-4 mb-6 border-b border-gray-200">
