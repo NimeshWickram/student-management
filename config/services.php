@@ -31,4 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'nvidia' => [
+        'key' => env('NVIDIA_API_KEY'),
+        'model' => env('NVIDIA_MODEL', 'meta/llama-3.1-8b-instruct'),
+    ],
+
 ];
