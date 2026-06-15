@@ -1,6 +1,6 @@
 @extends('student.layouts.layout')
 
-@section('title', 'Quiz Results: ' . $submission->quiz->title . ' — EduManager')
+@section('title', 'Quiz Results: ' . $submission->quiz->title . ' — CodeXpress')
 @section('page-title', 'Assessment Results')
 @section('breadcrumb')
 <a href="{{ route('student.dashboard') }}">Dashboard</a> / Quiz Results

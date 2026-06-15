@@ -96,11 +96,19 @@ class TeacherController extends Controller
             'email'        => 'required|email|unique:teachers,email',
             'phone_number' => ['required', 'string', 'regex:/^(0[0-9]{9}|[1-9][0-9]{8})$/'],
             'subject'      => 'required|string|max:255',
+            'salutation'   => 'required|string|in:Dr,Professor,Mr,Miss,Mrs',
+            'gender'       => 'required|string|in:male,female',
         ]);
 
         $validated['tenant_id'] = $this->getActiveTenantId();
 
-        Teacher::create($validated);
+        $teacher = Teacher::create($validated);
+
+        try {
+            \Illuminate\Support\Facades\Mail::to($teacher->email)->send(new \App\Mail\WelcomeTeacherMail($teacher, 'teacher123'));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Failed to send welcome email to teacher {$teacher->email}: " . $e->getMessage());
+        }
 
         return redirect()
             ->route('teachers.index')
@@ -118,6 +126,8 @@ class TeacherController extends Controller
             'email'        => 'required|email|unique:teachers,email,' . $teacher->id,
             'phone_number' => ['required', 'string', 'regex:/^(0[0-9]{9}|[1-9][0-9]{8})$/'],
             'subject'      => 'required|string|max:255',
+            'salutation'   => 'required|string|in:Dr,Professor,Mr,Miss,Mrs',
+            'gender'       => 'required|string|in:male,female',
         ]);
 
         $teacher->update($validated);

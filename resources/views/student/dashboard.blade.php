@@ -1,6 +1,6 @@
 @extends('student.layouts.layout')
 
-@section('title', 'Student Portal Dashboard — EduManager')
+@section('title', 'Student Portal Dashboard — CodeXpress')
 @section('page-title', 'Portal Dashboard')
 @section('breadcrumb')
 <a href="{{ route('student.dashboard') }}">Student Panel</a> / Home
@@ -299,6 +299,10 @@
         <h1>Welcome back, {{ $student->first_name }}! 👋</h1>
         <p style="margin-bottom: 1.25rem;">You are logged into the Student Portal. Here you can access educational assessments, track subject outlines, and evaluate your quiz performance scores dynamically.</p>
         <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <span style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: var(--white); padding: 0.35rem 0.85rem; border-radius: 30px; font-size: 0.78rem; font-weight: 800; display: inline-flex; align-items: center; gap: 0.35rem; font-family: monospace; letter-spacing: 0.05em;">
+                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 10h.01M12 10h.01M8 10h.01M16 14h.01M12 14h.01M8 14h.01"/></svg>
+                ID: {{ $student->student_id ?? 'N/A' }}
+            </span>
             <span style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: var(--white); padding: 0.35rem 0.85rem; border-radius: 30px; font-size: 0.78rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.35rem;">
                 <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                 Grade Scoping: {{ $student->grade }}

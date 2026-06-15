@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Login — EduManager</title>
+    <title>Student Login — CodeXpress</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -221,7 +221,7 @@
             <div class="brand-icon">
                 <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
             </div>
-            <h1 class="brand-title">EduManager</h1>
+            <h1 class="brand-title">CodeXpress</h1>
             <p class="brand-subtitle">Student Portal Authentication</p>
         </div>
 
@@ -269,8 +269,9 @@
             </div>
         </div>
 
-        <div class="back-to-admin">
-            <a href="{{ route('dashboard') }}">← Switch to Administrator Panel</a>
+        <div class="back-to-admin" style="display: flex; flex-direction: column; gap: 0.4rem;">
+            <a href="{{ route('teacher.login') }}">Switch to Teacher Portal →</a>
+            <a href="{{ route('admin.login') }}">Switch to Administrator Portal →</a>
         </div>
     </div>
 

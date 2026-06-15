@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Students Report — EduManager</title>
+    <title>Students Report — CodeXpress</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Helvetica', 'Arial', sans-serif; font-size: 12px; color: #1a1a1a; line-height: 1.5; }
@@ -96,7 +96,7 @@
 <body>
     <div class="header">
         <h1>📋 Student Report</h1>
-        <p>EduManager — Student Management System</p>
+        <p>CodeXpress — Student Management System</p>
     </div>
 
     <div class="meta-bar">
@@ -140,7 +140,7 @@
     </div>
 
     <div class="footer">
-        EduManager © {{ date('Y') }} — This report was generated automatically. | Page 1
+        CodeXpress © {{ date('Y') }} — This report was generated automatically. | Page 1
     </div>
 </body>
 </html>

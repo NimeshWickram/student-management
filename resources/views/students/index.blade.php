@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'Students — EduManager')
+@section('title', 'Students — CodeXpress')
 @section('page-title', 'Students')
 @section('breadcrumb')<a href="{{ route('dashboard') }}">Home</a> / Students @endsection
 
@@ -134,22 +134,24 @@ tbody td{padding:.8rem 1rem;font-size:.85rem;color:var(--g700);vertical-align:mi
 
 <div class="table-wrap">
     @if($students->count())
+    <div class="table-responsive">
     <table id="students-table">
-        <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th><th>Course</th><th>Grade</th><th>Password</th><th>Registered</th><th>Actions</th></tr></thead>
+        <thead><tr><th>#</th><th>Student ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Course</th><th>Grade</th><th>Password</th><th>Registered</th><th>Actions</th></tr></thead>
         <tbody>
             @foreach($students as $index => $student)
             <tr id="student-row-{{ $student->id }}">
-                <td>{{ $students->firstItem() + $index }}</td>
-                <td class="student-name">{{ $student->first_name }} {{ $student->last_name }}</td>
-                <td>{{ $student->email }}</td>
-                <td>{{ $student->phone_number }}</td>
-                <td><span class="badge">{{ $student->course }}</span></td>
-                <td><span class="badge" style="background:#f5f5f5;color:#171717;border:1px solid #e5e5e5;font-weight:600">{{ $student->grade }}</span></td>
-                <td>
+                <td data-label="#">{{ $students->firstItem() + $index }}</td>
+                <td data-label="Student ID"><span class="badge" style="background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd;font-family:monospace;font-weight:700;letter-spacing:.03em;font-size:.75rem">{{ $student->student_id ?? 'N/A' }}</span></td>
+                <td data-label="Name" class="student-name">{{ $student->first_name }} {{ $student->last_name }}</td>
+                <td data-label="Email">{{ $student->email }}</td>
+                <td data-label="Phone">{{ $student->phone_number }}</td>
+                <td data-label="Course"><span class="badge">{{ $student->course }}</span></td>
+                <td data-label="Grade"><span class="badge" style="background:#f5f5f5;color:#171717;border:1px solid #e5e5e5;font-weight:600">{{ $student->grade }}</span></td>
+                <td data-label="Password">
                     <span class="badge" style="background:#fef2f2;color:#ef4444;border:1.5px dashed #fca5a5;font-family:monospace;font-weight:600;padding:2px 8px;border-radius:6px;font-size:0.75rem">••••••••</span>
                 </td>
-                <td>{{ $student->created_at->format('d M Y') }}</td>
-                <td>
+                <td data-label="Registered">{{ $student->created_at->format('d M Y') }}</td>
+                <td data-label="Actions">
                     <div class="actions">
                         <button type="button" class="btn-edit" onclick="openEditModal({{ $student->id }}, {{ json_encode($student->first_name) }}, {{ json_encode($student->last_name) }}, {{ json_encode($student->email) }}, {{ json_encode($student->phone_number) }}, {{ json_encode($student->course) }}, {{ json_encode($student->grade) }})">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
@@ -168,6 +170,7 @@ tbody td{padding:.8rem 1rem;font-size:.85rem;color:var(--g700);vertical-align:mi
             @endforeach
         </tbody>
     </table>
+    </div>
     @else
     <div class="empty-state">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
@@ -192,6 +195,9 @@ tbody td{padding:.8rem 1rem;font-size:.85rem;color:var(--g700);vertical-align:mi
         </div>
         <form action="{{ route('students.store') }}" method="POST" autocomplete="off" id="modal-create-form">
             @csrf
+            <!-- Dummy fields to prevent browser password autofill -->
+            <input type="text" name="prevent_autofill_email" style="display:none;" />
+            <input type="password" name="prevent_autofill_password" style="display:none;" />
             <div class="modal-body">
                 <div class="form-row">
                     <div class="form-group"><label>First Name</label><div class="input-wrapper"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><input type="text" name="first_name" placeholder="John" required></div></div>
@@ -201,7 +207,7 @@ tbody td{padding:.8rem 1rem;font-size:.85rem;color:var(--g700);vertical-align:mi
                 <div class="form-group"><label>Phone</label><div class="input-wrapper"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.13.81.36 1.6.68 2.34a2 2 0 01-.45 2.11L8.09 9.41a16 16 0 006.5 6.5l1.24-1.24a2 2 0 012.11-.45c.74.32 1.53.55 2.34.68a2 2 0 011.72 2.02z"/></svg><input type="text" name="phone_number" placeholder="0771234567" pattern="^(0[0-9]{9}|[1-9][0-9]{8})$" title="Phone number must be 10 digits if starting with 0, or 9 digits otherwise." required></div></div>
                 <div class="form-group"><label>Course</label><div class="input-wrapper sw"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><select name="course" required><option value="" disabled selected>Select a course…</option><option>Primary Education</option><option>Junior Secondary</option><option>Ordinary Level</option></select></div></div>
                 <div class="form-group"><label>Grade</label><div class="input-wrapper sw"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg><select name="grade" required><option value="" disabled selected>Select a grade…</option><option>Grade 1</option><option>Grade 2</option><option>Grade 3</option><option>Grade 4</option><option>Grade 5</option><option>Grade 6</option><option>Grade 7</option><option>Grade 8</option><option>Grade 9</option><option>Grade 10</option><option>Grade 11</option></select></div></div>
-                <div class="form-group"><label>Password</label><div class="input-wrapper"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><input type="password" name="password" id="add_password" placeholder="Leave blank to use default (student123)" minlength="6" style="padding-right:2.5rem"><button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('add_password', this)"><svg class="eye-icon" style="width:18px;height:18px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+                <div class="form-group"><label>Password</label><div class="input-wrapper"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><input type="password" name="password" id="add_password" placeholder="Leave blank to use default (student123)" minlength="6" autocomplete="new-password" style="padding-right:2.5rem"><button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('add_password', this)"><svg class="eye-icon" style="width:18px;height:18px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn-reset" onclick="this.closest('form').reset()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2.5 2v6h6"/><path d="M2.5 8A10 10 0 1 1 4.93 17"/></svg>Reset</button>
@@ -222,6 +228,9 @@ tbody td{padding:.8rem 1rem;font-size:.85rem;color:var(--g700);vertical-align:mi
         </div>
         <form method="POST" autocomplete="off" id="modal-edit-form">
             @csrf @method('PUT')
+            <!-- Dummy fields to prevent browser password autofill -->
+            <input type="text" name="prevent_autofill_email" style="display:none;" />
+            <input type="password" name="prevent_autofill_password" style="display:none;" />
             <div class="modal-body">
                 <div class="form-row">
                     <div class="form-group"><label>First Name</label><div class="input-wrapper"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><input type="text" name="first_name" id="edit_first_name" required></div></div>
@@ -231,7 +240,7 @@ tbody td{padding:.8rem 1rem;font-size:.85rem;color:var(--g700);vertical-align:mi
                 <div class="form-group"><label>Phone</label><div class="input-wrapper"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.13.81.36 1.6.68 2.34a2 2 0 01-.45 2.11L8.09 9.41a16 16 0 006.5 6.5l1.24-1.24a2 2 0 012.11-.45c.74.32 1.53.55 2.34.68a2 2 0 011.72 2.02z"/></svg><input type="text" name="phone_number" id="edit_phone" pattern="^(0[0-9]{9}|[1-9][0-9]{8})$" title="Phone number must be 10 digits if starting with 0, or 9 digits otherwise." required></div></div>
                 <div class="form-group"><label>Course</label><div class="input-wrapper sw"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><select name="course" id="edit_course" required><option value="" disabled>Select a course…</option><option>Primary Education</option><option>Junior Secondary</option><option>Ordinary Level</option></select></div></div>
                 <div class="form-group"><label>Grade</label><div class="input-wrapper sw"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg><select name="grade" id="edit_grade" required><option value="" disabled>Select a grade…</option><option>Grade 1</option><option>Grade 2</option><option>Grade 3</option><option>Grade 4</option><option>Grade 5</option><option>Grade 6</option><option>Grade 7</option><option>Grade 8</option><option>Grade 9</option><option>Grade 10</option><option>Grade 11</option></select></div></div>
-                <div class="form-group"><label>New Password</label><div class="input-wrapper"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><input type="password" name="password" id="edit_password" placeholder="Leave blank to keep unchanged" minlength="6" style="padding-right:2.5rem"><button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('edit_password', this)"><svg class="eye-icon" style="width:18px;height:18px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+                <div class="form-group"><label>New Password</label><div class="input-wrapper"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><input type="password" name="password" id="edit_password" placeholder="Leave blank to keep unchanged" minlength="6" autocomplete="new-password" style="padding-right:2.5rem"><button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('edit_password', this)"><svg class="eye-icon" style="width:18px;height:18px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn-reset" onclick="closeModal('edit-student-modal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>Cancel</button>

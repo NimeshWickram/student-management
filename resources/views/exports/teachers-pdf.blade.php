@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Teachers Report — EduManager</title>
+    <title>Teachers Report — CodeXpress</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Helvetica', 'Arial', sans-serif; font-size: 12px; color: #1a1a1a; line-height: 1.5; }
@@ -95,7 +95,7 @@
 <body>
     <div class="header">
         <h1>👩‍🏫 Teacher Report</h1>
-        <p>EduManager — Student Management System</p>
+        <p>CodeXpress — Student Management System</p>
     </div>
 
     <div class="meta-bar">
@@ -111,22 +111,24 @@
             <thead>
                 <tr>
                     <th style="width:5%">#</th>
-                    <th style="width:20%">Name</th>
+                    <th style="width:10%">Title</th>
+                    <th style="width:22%">Name</th>
+                    <th style="width:10%">Gender</th>
                     <th style="width:22%">Email</th>
                     <th style="width:15%">Phone</th>
-                    <th style="width:20%">Subject</th>
-                    <th style="width:18%">Joined</th>
+                    <th style="width:16%">Subject</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($teachers as $index => $teacher)
                 <tr>
                     <td>{{ $index + 1 }}</td>
+                    <td style="font-weight: 600;">{{ $teacher->salutation ?? '—' }}</td>
                     <td class="name-cell">{{ $teacher->first_name }} {{ $teacher->last_name }}</td>
+                    <td>{{ ucfirst($teacher->gender ?? '—') }}</td>
                     <td>{{ $teacher->email }}</td>
                     <td>{{ $teacher->phone_number }}</td>
                     <td><span class="badge">{{ $teacher->subject }}</span></td>
-                    <td>{{ $teacher->created_at->format('d M Y') }}</td>
                 </tr>
                 @endforeach
             </tbody>
@@ -139,7 +141,7 @@
     </div>
 
     <div class="footer">
-        EduManager © {{ date('Y') }} — This report was generated automatically. | Page 1
+        CodeXpress © {{ date('Y') }} — This report was generated automatically. | Page 1
     </div>
 </body>
 </html>

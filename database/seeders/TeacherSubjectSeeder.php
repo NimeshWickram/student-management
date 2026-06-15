@@ -105,59 +105,105 @@ class TeacherSubjectSeeder extends Seeder
             [
                 'first_name' => 'Anula', 'last_name' => 'Senanayake', 
                 'email' => 'anula.senanayake@school.lk', 'phone_number' => '+94 71 111 2222', 
-                'subject' => 'Sinhala Language', 'tenant_id' => $tenantMain->id
+                'subject' => 'Sinhala Language', 'tenant_id' => $tenantMain->id,
+                'salutation' => 'Mrs', 'gender' => 'female'
             ],
             [
                 'first_name' => 'Bandara', 'last_name' => 'Karunaratne', 
                 'email' => 'bandara.k@school.lk', 'phone_number' => '+94 77 222 3333', 
-                'subject' => 'Science', 'tenant_id' => $tenantMain->id
+                'subject' => 'Science', 'tenant_id' => $tenantMain->id,
+                'salutation' => 'Mr', 'gender' => 'male'
             ],
             [
                 'first_name' => 'Nimali', 'last_name' => 'Cooray', 
                 'email' => 'nimali.cooray@school.lk', 'phone_number' => '+94 76 333 4444', 
-                'subject' => 'Mathematics', 'tenant_id' => $tenantMain->id
+                'subject' => 'Mathematics', 'tenant_id' => $tenantMain->id,
+                'salutation' => 'Miss', 'gender' => 'female'
             ],
             [
                 'first_name' => 'Dilani', 'last_name' => 'Perera', 
                 'email' => 'dilani.perera@school.lk', 'phone_number' => '+94 75 444 5555', 
-                'subject' => 'English', 'tenant_id' => $tenantMain->id
+                'subject' => 'English', 'tenant_id' => $tenantMain->id,
+                'salutation' => 'Mrs', 'gender' => 'female'
             ],
             [
                 'first_name' => 'Kusum', 'last_name' => 'Ranasinghe', 
                 'email' => 'kusum.r@school.lk', 'phone_number' => '+94 70 555 6666', 
-                'subject' => 'History', 'tenant_id' => $tenantMain->id
+                'subject' => 'History', 'tenant_id' => $tenantMain->id,
+                'salutation' => 'Mrs', 'gender' => 'female'
+            ],
+            [
+                'first_name' => 'Sarath', 'last_name' => 'Dissanayake', 
+                'email' => 'sarath.d@school.lk', 'phone_number' => '+94 71 678 1234', 
+                'subject' => 'Science', 'tenant_id' => $tenantMain->id,
+                'salutation' => 'Dr', 'gender' => 'male'
+            ],
+            [
+                'first_name' => 'Sunil', 'last_name' => 'Ariyarathne', 
+                'email' => 'sunil.a@school.lk', 'phone_number' => '+94 77 987 1122', 
+                'subject' => 'Sinhala Language', 'tenant_id' => $tenantMain->id,
+                'salutation' => 'Professor', 'gender' => 'male'
+            ],
+            [
+                'first_name' => 'Kumari', 'last_name' => 'Jayawardene', 
+                'email' => 'kumari.j@school.lk', 'phone_number' => '+94 76 444 8888', 
+                'subject' => 'Mathematics', 'tenant_id' => $tenantMain->id,
+                'salutation' => 'Miss', 'gender' => 'female'
             ],
 
             // West Campus Teachers
             [
                 'first_name' => 'Kanthi', 'last_name' => 'Jayasekara', 
                 'email' => 'kanthi.j@school.lk', 'phone_number' => '+94 78 666 7777', 
-                'subject' => 'Sinhala Language', 'tenant_id' => $tenantWest->id
+                'subject' => 'Sinhala Language', 'tenant_id' => $tenantWest->id,
+                'salutation' => 'Mrs', 'gender' => 'female'
             ],
             [
                 'first_name' => 'Ruwan', 'last_name' => 'Wijewardene', 
                 'email' => 'ruwan.w@school.lk', 'phone_number' => '+94 74 777 8888', 
-                'subject' => 'Science', 'tenant_id' => $tenantWest->id
+                'subject' => 'Science', 'tenant_id' => $tenantWest->id,
+                'salutation' => 'Professor', 'gender' => 'male'
             ],
             [
                 'first_name' => 'Priyantha', 'last_name' => 'Fernando', 
                 'email' => 'priyantha.f@school.lk', 'phone_number' => '+94 72 888 9999', 
-                'subject' => 'Mathematics', 'tenant_id' => $tenantWest->id
+                'subject' => 'Mathematics', 'tenant_id' => $tenantWest->id,
+                'salutation' => 'Mr', 'gender' => 'male'
             ],
             [
                 'first_name' => 'Sanduni', 'last_name' => 'de Silva', 
                 'email' => 'sanduni.desilva@school.lk', 'phone_number' => '+94 71 999 0000', 
-                'subject' => 'English', 'tenant_id' => $tenantWest->id
+                'subject' => 'English', 'tenant_id' => $tenantWest->id,
+                'salutation' => 'Miss', 'gender' => 'female'
             ],
             [
                 'first_name' => 'Chaminda', 'last_name' => 'Alwis', 
                 'email' => 'chaminda.alwis@school.lk', 'phone_number' => '+94 77 123 9876', 
-                'subject' => 'Information & Communication Technology', 'tenant_id' => $tenantWest->id
+                'subject' => 'Information & Communication Technology', 'tenant_id' => $tenantWest->id,
+                'salutation' => 'Dr', 'gender' => 'male'
+            ],
+            [
+                'first_name' => 'Renuka', 'last_name' => 'Herath', 
+                'email' => 'renuka.h@school.lk', 'phone_number' => '+94 70 222 5555', 
+                'subject' => 'Sinhala Language', 'tenant_id' => $tenantWest->id,
+                'salutation' => 'Mrs', 'gender' => 'female'
+            ],
+            [
+                'first_name' => 'Wasantha', 'last_name' => 'Kumara', 
+                'email' => 'wasantha.k@school.lk', 'phone_number' => '+94 75 888 7777', 
+                'subject' => 'Mathematics', 'tenant_id' => $tenantWest->id,
+                'salutation' => 'Mr', 'gender' => 'male'
+            ],
+            [
+                'first_name' => 'Shirley', 'last_name' => 'Perera', 
+                'email' => 'shirley.p@school.lk', 'phone_number' => '+94 78 555 9999', 
+                'subject' => 'English', 'tenant_id' => $tenantWest->id,
+                'salutation' => 'Dr', 'gender' => 'female'
             ],
         ];
 
         foreach ($teachersData as $t) {
-            Teacher::firstOrCreate(
+            Teacher::updateOrCreate(
                 ['email' => $t['email']],
                 $t
             );
@@ -205,6 +251,36 @@ class TeacherSubjectSeeder extends Seeder
                 'course' => 'Primary Education', 'grade' => 'Grade 1',
                 'password' => bcrypt('student123'), 'tenant_id' => $tenantMain->id
             ],
+            [
+                'first_name' => 'Roshan', 'last_name' => 'Gunawardena', 
+                'email' => 'roshan@main.lk', 'phone_number' => '0771234565', 
+                'course' => 'Ordinary Level', 'grade' => 'Grade 10',
+                'password' => bcrypt('student123'), 'tenant_id' => $tenantMain->id
+            ],
+            [
+                'first_name' => 'Nimasha', 'last_name' => 'Herath', 
+                'email' => 'nimasha@main.lk', 'phone_number' => '0771234566', 
+                'course' => 'Ordinary Level', 'grade' => 'Grade 11',
+                'password' => bcrypt('student123'), 'tenant_id' => $tenantMain->id
+            ],
+            [
+                'first_name' => 'Devinda', 'last_name' => 'Senanayake', 
+                'email' => 'devinda@main.lk', 'phone_number' => '0771234567', 
+                'course' => 'Junior Secondary', 'grade' => 'Grade 8',
+                'password' => bcrypt('student123'), 'tenant_id' => $tenantMain->id
+            ],
+            [
+                'first_name' => 'Sashini', 'last_name' => 'Jayasekara', 
+                'email' => 'sashini@main.lk', 'phone_number' => '0771234568', 
+                'course' => 'Ordinary Level', 'grade' => 'Grade 10',
+                'password' => bcrypt('student123'), 'tenant_id' => $tenantMain->id
+            ],
+            [
+                'first_name' => 'Manuja', 'last_name' => 'Bandara', 
+                'email' => 'manuja@main.lk', 'phone_number' => '0771234569', 
+                'course' => 'Ordinary Level', 'grade' => 'Grade 11',
+                'password' => bcrypt('student123'), 'tenant_id' => $tenantMain->id
+            ],
 
             // West Branch Students
             [
@@ -229,6 +305,36 @@ class TeacherSubjectSeeder extends Seeder
                 'first_name' => 'Hansini', 'last_name' => 'Fernando', 
                 'email' => 'hansini@west.lk', 'phone_number' => '0779876543', 
                 'course' => 'Primary Education', 'grade' => 'Grade 3',
+                'password' => bcrypt('student123'), 'tenant_id' => $tenantWest->id
+            ],
+            [
+                'first_name' => 'Ruwanthi', 'last_name' => 'Alwis', 
+                'email' => 'ruwanthi@west.lk', 'phone_number' => '0779876544', 
+                'course' => 'Ordinary Level', 'grade' => 'Grade 10',
+                'password' => bcrypt('student123'), 'tenant_id' => $tenantWest->id
+            ],
+            [
+                'first_name' => 'Gayan', 'last_name' => 'Karunaratne', 
+                'email' => 'gayan@west.lk', 'phone_number' => '0779876545', 
+                'course' => 'Ordinary Level', 'grade' => 'Grade 11',
+                'password' => bcrypt('student123'), 'tenant_id' => $tenantWest->id
+            ],
+            [
+                'first_name' => 'Sanduni', 'last_name' => 'Fernando', 
+                'email' => 'sanduni.f@west.lk', 'phone_number' => '0779876546', 
+                'course' => 'Junior Secondary', 'grade' => 'Grade 9',
+                'password' => bcrypt('student123'), 'tenant_id' => $tenantWest->id
+            ],
+            [
+                'first_name' => 'Ishara', 'last_name' => 'Rathnayake', 
+                'email' => 'ishara@west.lk', 'phone_number' => '0779876547', 
+                'course' => 'Ordinary Level', 'grade' => 'Grade 10',
+                'password' => bcrypt('student123'), 'tenant_id' => $tenantWest->id
+            ],
+            [
+                'first_name' => 'Dinesh', 'last_name' => 'Cooray', 
+                'email' => 'dinesh@west.lk', 'phone_number' => '0779876548', 
+                'course' => 'Ordinary Level', 'grade' => 'Grade 11',
                 'password' => bcrypt('student123'), 'tenant_id' => $tenantWest->id
             ],
         ];

@@ -15,12 +15,24 @@ class Subject extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'subject_id',
         'name',
         'code',
         'description',
         'credits',
         'tenant_id',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($subject) {
+            if (empty($subject->subject_id)) {
+                $last = static::max('id') ?? 0;
+                $subject->subject_id = 'SUB-' . str_pad($last + 1, 4, '0', STR_PAD_LEFT);
+            }
+        });
+    }
 
     /**
      * Get the quizzes for the subject.

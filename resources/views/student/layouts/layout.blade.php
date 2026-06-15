@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Student Panel — EduManager')</title>
-    <meta name="description" content="Student Portal for EduManager">
+    <title>@yield('title', 'Student Panel — CodeXpress')</title>
+    <meta name="description" content="Student Portal for CodeXpress">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -211,6 +211,20 @@
         /* Footer */
         .page-footer{text-align:center;padding:1.75rem 1rem;font-size:.78rem;color:var(--g400);border-top:1px solid var(--g200);background: var(--white);}
 
+        /* Tables (Responsive) */
+        .table-responsive{width:100%;margin-bottom:1rem;border-radius:var(--radius-sm);border:1px solid var(--g200);background:var(--white);}
+        .table-responsive table{width:100%;min-width:800px;border-collapse:collapse;margin:0;}
+        @media(max-width:768px){ 
+            .table-responsive{border:none;background:transparent;}
+            .table-responsive table{min-width:100%;}
+            .table-responsive table thead{display:none;}
+            .table-responsive table tbody tr{display:block;border:1px solid var(--g200);border-radius:var(--radius-sm);margin-bottom:1rem;background:var(--white);box-shadow:0 2px 4px rgba(0,0,0,0.02);padding:0.5rem 0;}
+            .table-responsive table tbody td{display:flex;justify-content:space-between;align-items:center;padding:0.5rem 1rem;text-align:right;border-bottom:1px solid var(--g100);}
+            .table-responsive table tbody td:last-child{border-bottom:none;}
+            .table-responsive table tbody td::before{content:attr(data-label);font-weight:700;color:var(--g500);text-transform:uppercase;font-size:0.7rem;letter-spacing:0.04em;text-align:left;flex:1;padding-right:1rem;}
+            .table-responsive table tbody td > .actions { justify-content: flex-end; width: 100%; }
+        }
+
         /* Mobile overlay */
         .sidebar-overlay{
             display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);
@@ -262,7 +276,7 @@
                 <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
             </div>
             <div class="brand-text">
-                EduManager
+                CodeXpress
                 <span class="brand-sub">Student Portal</span>
             </div>
         </a>
@@ -295,6 +309,14 @@
             </div>
 
             <div class="nav-section">
+                <div class="nav-section-title">Account Settings</div>
+                <a href="{{ route('student.profile') }}" class="nav-item {{ request()->routeIs('student.profile') ? 'active' : '' }}" id="nav-profile">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span class="nav-label">My Profile</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
                 <div class="nav-section-title">Sign Out</div>
                 <div class="nav-item">
                     <form action="{{ route('student.logout') }}" method="POST" id="logout-form" style="width: 100%;">
@@ -309,7 +331,7 @@
         </nav>
 
         <div class="sidebar-footer">
-            <span>© {{ date('Y') }} EduManager</span>
+            <span>© {{ date('Y') }} CodeXpress</span>
         </div>
     </aside>
 
@@ -343,7 +365,7 @@
             @yield('content')
         </main>
 
-        <footer class="page-footer">EduManager — Student Management System © {{ date('Y') }}</footer>
+        <footer class="page-footer">CodeXpress — Student Management System © {{ date('Y') }}</footer>
     </div>
 
     <!-- SweetAlert2 JS -->

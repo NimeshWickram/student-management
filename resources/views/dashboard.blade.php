@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'Dashboard — EduManager')
+@section('title', 'Dashboard — CodeXpress')
 @section('description', 'Overview of your educational management system.')
 @section('page-title', 'Dashboard')
 @section('breadcrumb')

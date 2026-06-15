@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'Teachers — EduManager')
+@section('title', 'Teachers — CodeXpress')
 @section('page-title', 'Teachers')
 @section('breadcrumb')<a href="{{ route('dashboard') }}">Home</a> / Teachers @endsection
 
@@ -132,22 +132,35 @@ tbody td{padding:.8rem 1rem;font-size:.85rem;color:var(--g700)}
 
 <div class="table-wrap">
 @if($teachers->count())
-<table id="teachers-table"><thead><tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th><th>Subject</th><th>Joined</th><th>Actions</th></tr></thead>
+<div class="table-responsive">
+<table id="teachers-table"><thead><tr><th>#</th><th>Teacher ID</th><th>Title</th><th>Name</th><th>Gender</th><th>Email</th><th>Phone</th><th>Subject</th><th>Joined</th><th>Actions</th></tr></thead>
 <tbody>
 @foreach($teachers as $i => $t)
 <tr>
-    <td>{{ $teachers->firstItem()+$i }}</td>
-    <td class="t-name">{{ $t->first_name }} {{ $t->last_name }}</td>
-    <td>{{ $t->email }}</td><td>{{ $t->phone_number }}</td>
-    <td><span class="badge">{{ $t->subject }}</span></td>
-    <td>{{ $t->created_at->format('d M Y') }}</td>
-    <td><div class="actions">
-        <button type="button" class="btn-edit" onclick="openEditTeacher({{ $t->id }},{{ json_encode($t->first_name) }},{{ json_encode($t->last_name) }},{{ json_encode($t->email) }},{{ json_encode($t->phone_number) }},{{ json_encode($t->subject) }})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>
+    <td data-label="#">{{ $teachers->firstItem()+$i }}</td>
+    <td data-label="Teacher ID"><span class="badge" style="background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd;font-family:monospace;font-weight:700;letter-spacing:.03em;font-size:.75rem">{{ $t->teacher_id ?? 'N/A' }}</span></td>
+    <td data-label="Title" style="font-weight: 700; color: var(--black);">{{ $t->salutation ?? '—' }}</td>
+    <td data-label="Name" class="t-name">{{ $t->first_name }} {{ $t->last_name }}</td>
+    <td data-label="Gender">
+        @if(strtolower($t->gender) === 'male')
+            <span class="badge" style="background: rgba(37, 99, 235, 0.1); border-color: rgba(37, 99, 235, 0.2); color: #2563eb;">Male</span>
+        @elseif(strtolower($t->gender) === 'female')
+            <span class="badge" style="background: rgba(236, 72, 153, 0.1); border-color: rgba(236, 72, 153, 0.2); color: #ec4899;">Female</span>
+        @else
+            <span class="badge" style="background: rgba(107, 114, 128, 0.1); border-color: rgba(107, 114, 128, 0.2); color: #6b7280;">—</span>
+        @endif
+    </td>
+    <td data-label="Email">{{ $t->email }}</td><td data-label="Phone">{{ $t->phone_number }}</td>
+    <td data-label="Subject"><span class="badge">{{ $t->subject }}</span></td>
+    <td data-label="Joined">{{ $t->created_at->format('d M Y') }}</td>
+    <td data-label="Actions"><div class="actions">
+        <button type="button" class="btn-edit" onclick="openEditTeacher({{ $t->id }},{{ json_encode($t->first_name) }},{{ json_encode($t->last_name) }},{{ json_encode($t->email) }},{{ json_encode($t->phone_number) }},{{ json_encode($t->subject) }},{{ json_encode($t->salutation) }},{{ json_encode($t->gender) }})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>
         <form action="{{ route('teachers.destroy',$t) }}" method="POST" class="delete-form">@csrf @method('DELETE')<button type="submit" class="btn-delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>Delete</button></form>
     </div></td>
 </tr>
 @endforeach
 </tbody></table>
+</div>
 @else
 <div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><h3>No teachers found</h3><p>{{ request('search') ? 'Try adjusting your search.' : 'Add your first teacher.' }}</p></div>
 @endif
@@ -163,6 +176,10 @@ tbody td{padding:.8rem 1rem;font-size:.85rem;color:var(--g700)}
 <button type="button" class="modal-close" onclick="closeModal('add-teacher-modal')">&times;</button></div>
 <form action="{{ route('teachers.store') }}" method="POST" autocomplete="off" id="add-teacher-form">@csrf
 <div class="modal-body">
+<div class="form-row">
+<div class="form-group"><label>Title (Salutation)</label><div class="input-wrapper sw"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><select name="salutation" required><option value="" disabled selected>Select title…</option><option>Dr</option><option>Professor</option><option>Mr</option><option>Miss</option><option>Mrs</option></select></div></div>
+<div class="form-group"><label>Gender</label><div class="input-wrapper sw"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><select name="gender" required><option value="" disabled selected>Select gender…</option><option value="male">Male</option><option value="female">Female</option></select></div></div>
+</div>
 <div class="form-row">
 <div class="form-group"><label>First Name</label><div class="input-wrapper"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><input type="text" name="first_name" placeholder="Jane" required></div></div>
 <div class="form-group"><label>Last Name</label><div class="input-wrapper"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><input type="text" name="last_name" placeholder="Smith" required></div></div>
@@ -185,6 +202,10 @@ tbody td{padding:.8rem 1rem;font-size:.85rem;color:var(--g700)}
 <form method="POST" autocomplete="off" id="edit-teacher-form">@csrf @method('PUT')
 <div class="modal-body">
 <div class="form-row">
+<div class="form-group"><label>Title (Salutation)</label><div class="input-wrapper sw"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><select name="salutation" id="et_sal" required><option value="" disabled>Select title…</option><option>Dr</option><option>Professor</option><option>Mr</option><option>Miss</option><option>Mrs</option></select></div></div>
+<div class="form-group"><label>Gender</label><div class="input-wrapper sw"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><select name="gender" id="et_gen" required><option value="" disabled>Select gender…</option><option value="male">Male</option><option value="female">Female</option></select></div></div>
+</div>
+<div class="form-row">
 <div class="form-group"><label>First Name</label><div class="input-wrapper"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><input type="text" name="first_name" id="et_fn" required></div></div>
 <div class="form-group"><label>Last Name</label><div class="input-wrapper"><svg class="fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><input type="text" name="last_name" id="et_ln" required></div></div>
 </div>
@@ -201,11 +222,13 @@ tbody td{padding:.8rem 1rem;font-size:.85rem;color:var(--g700)}
 @section('scripts')
 <script>
 function closeModal(id){document.getElementById(id).classList.remove('active')}
-function openEditTeacher(id,fn,ln,em,ph,sub){
+function openEditTeacher(id,fn,ln,em,ph,sub,sal,gen){
     document.getElementById('edit-teacher-form').action='/teachers/'+id;
     document.getElementById('et_fn').value=fn;document.getElementById('et_ln').value=ln;
     document.getElementById('et_em').value=em;document.getElementById('et_ph').value=ph;
     document.getElementById('et_sub').value=sub;
+    document.getElementById('et_sal').value=sal || '';
+    document.getElementById('et_gen').value=gen || '';
     document.getElementById('edit-teacher-modal').classList.add('active');
 }
 document.querySelectorAll('.modal-overlay').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('active')})});

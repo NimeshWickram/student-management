@@ -118,15 +118,26 @@ class StudentController extends Controller
             'password'     => 'nullable|string|min:6',
         ]);
 
+        $rawPassword = !empty($validated['password']) ? $validated['password'] : 'student123';
+        if ($rawPassword === 'teacher123') {
+            $rawPassword = 'student123';
+        }
+
         $validated['tenant_id'] = $this->getActiveTenantId();
 
-        if (!empty($validated['password'])) {
-            $validated['password'] = bcrypt($validated['password']);
+        if ($rawPassword !== 'student123') {
+            $validated['password'] = bcrypt($rawPassword);
         } else {
             unset($validated['password']);
         }
 
-        Student::create($validated);
+        $student = Student::create($validated);
+
+        try {
+            \Illuminate\Support\Facades\Mail::to($student->email)->send(new \App\Mail\WelcomeStudentMail($student, $rawPassword));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Failed to send welcome email to student {$student->email}: " . $e->getMessage());
+        }
 
         return redirect()
             ->route('students.index')

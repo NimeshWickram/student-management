@@ -14,21 +14,49 @@
     <style>
         *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
         :root{
-            --white:#fff;--black:#0a0a0a;
-            --g50:#fafafa;--g100:#f5f5f5;--g200:#e5e5e5;--g300:#d4d4d4;
-            --g400:#a3a3a3;--g500:#737373;--g600:#525252;--g700:#404040;
-            --g800:#262626;--g900:#171717;
-            --radius:12px;--radius-sm:8px;
-            --shadow-lg:0 12px 48px rgba(0,0,0,.12);
+            --white:#fff;--black:#09090b;
+            --g50:#fafafa;--g100:#f4f4f5;--g200:#e4e4e7;--g300:#d4d4d8;
+            --g400:#a1a1aa;--g500:#71717a;--g600:#52525b;--g700:#3f3f46;
+            --g800:#27272a;--g900:#18181b;
+            --radius:16px;--radius-sm:10px;
+            --shadow-lg:0 10px 30px rgba(0,0,0,.08);
             --tr:0.25s cubic-bezier(.4,0,.2,1);
-            --sidebar-w:260px;
-            --sidebar-collapsed-w:72px;
-            --topbar-h:60px;
-            --accent:#6366f1;
-            --accent-light:#818cf8;
+            --sidebar-w:265px;
+            --sidebar-collapsed-w:76px;
+            --topbar-h:70px;
+            --accent:#4f46e5;
+            --accent-light:#6366f1;
+            --accent-glow:rgba(79, 70, 229, 0.08);
         }
         html{font-size:16px;-webkit-font-smoothing:antialiased}
-        body{font-family:'Inter',system-ui,sans-serif;background:var(--g100);color:var(--black);min-height:100vh;display:flex}
+        body{font-family:'Inter',system-ui,sans-serif;background:var(--g100);color:var(--black);min-height:100vh;display:flex;position:relative;overflow-x:hidden;}
+        
+        /* Subtle grid background pattern */
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(79,70,229,0.01) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(79,70,229,0.01) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Ambient Glow */
+        .ambient-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(79,70,229,0.05) 0%, rgba(79,70,229,0) 70%);
+            filter: blur(100px);
+            top: -200px;
+            right: -200px;
+            z-index: -1;
+            pointer-events: none;
+        }
 
         /* ═══════════════════════════════════════
            SIDEBAR
@@ -61,6 +89,51 @@
         .sidebar-brand .brand-icon svg{width:20px;height:20px;fill:var(--white)}
         .sidebar-brand .brand-text{font-size:.95rem;font-weight:700;letter-spacing:-.02em;white-space:nowrap;overflow:hidden}
         .sidebar-brand .brand-sub{font-size:.65rem;color:var(--g400);font-weight:400;display:block;letter-spacing:.02em;margin-top:.1rem}
+
+        .admin-profile-widget {
+            padding: 1.25rem;
+            margin: 1rem 1rem 0.5rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .admin-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: var(--white);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        .admin-info {
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .admin-name {
+            font-size: 0.825rem;
+            font-weight: 600;
+            color: var(--white);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .admin-role {
+            font-size: 0.68rem;
+            color: var(--g400);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 0.1rem;
+        }
 
         .sidebar-nav{flex:1;padding:.75rem 0;overflow-y:auto;overflow-x:hidden}
         .sidebar-nav::-webkit-scrollbar{width:4px}
@@ -101,9 +174,31 @@
         .nav-item.active .nav-badge{background:rgba(99,102,241,.3);color:var(--accent-light)}
 
         .sidebar-footer{
-            padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,.06);
-            font-size:.7rem;color:var(--g600);white-space:nowrap;overflow:hidden;
+            padding:1.25rem 1.5rem;border-top:1px solid rgba(255,255,255,.06);
+            font-size:.72rem;color:var(--g500);white-space:nowrap;overflow:hidden;
             flex-shrink:0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+            font-size: inherit;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0;
+            transition: color var(--tr);
+        }
+        .logout-btn:hover {
+            color: var(--white);
         }
 
         /* ═══════════════════════════════════════
@@ -153,6 +248,20 @@
 
         /* Footer */
         .page-footer{text-align:center;padding:1.5rem 1rem;font-size:.75rem;color:var(--g400);border-top:1px solid var(--g200)}
+
+        /* Tables (Responsive) */
+        .table-responsive{width:100%;margin-bottom:1rem;border-radius:var(--radius-sm);border:1px solid var(--g200);background:var(--white);}
+        .table-responsive table{width:100%;min-width:800px;border-collapse:collapse;margin:0;}
+        @media(max-width:768px){ 
+            .table-responsive{border:none;background:transparent;}
+            .table-responsive table{min-width:100%;}
+            .table-responsive table thead{display:none;}
+            .table-responsive table tbody tr{display:block;border:1px solid var(--g200);border-radius:var(--radius-sm);margin-bottom:1rem;background:var(--white);box-shadow:0 2px 4px rgba(0,0,0,0.02);padding:0.5rem 0;}
+            .table-responsive table tbody td{display:flex;justify-content:space-between;align-items:center;padding:0.5rem 1rem;text-align:right;border-bottom:1px solid var(--g100);}
+            .table-responsive table tbody td:last-child{border-bottom:none;}
+            .table-responsive table tbody td::before{content:attr(data-label);font-weight:700;color:var(--g500);text-transform:uppercase;font-size:0.7rem;letter-spacing:0.04em;text-align:left;flex:1;padding-right:1rem;}
+            .table-responsive table tbody td > .actions { justify-content: flex-end; width: 100%; }
+        }
 
         /* ═══════════════════════════════════════
            PAGINATION
@@ -215,6 +324,7 @@
     @yield('styles')
 </head>
 <body>
+    <div class="ambient-glow"></div>
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <a href="{{ route('dashboard') }}" class="sidebar-brand">
@@ -222,8 +332,21 @@
                 <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
             </div>
             <div class="brand-text">
-                EduManager
+                CodeXpress
                 <span class="brand-sub">Management System</span>
+            </div>
+        </a>
+
+        <!-- Admin Profile Widget -->
+        <a href="{{ route('admin.profile') }}" style="text-decoration: none;">
+            <div class="admin-profile-widget">
+                <div class="admin-avatar">
+                    {{ substr(strtoupper(auth('web')->user()->name), 0, 1) }}
+                </div>
+                <div class="admin-info">
+                    <span class="admin-name">{{ auth('web')->user()->name }}</span>
+                    <span class="admin-role">System Admin</span>
+                </div>
             </div>
         </a>
 
@@ -233,6 +356,10 @@
                 <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}" id="nav-dashboard">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
                     <span class="nav-label">Dashboard</span>
+                </a>
+                <a href="{{ route('admin.profile') }}" class="nav-item {{ request()->routeIs('admin.profile') ? 'active' : '' }}" id="nav-profile">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span class="nav-label">My Profile</span>
                 </a>
             </div>
 
@@ -259,10 +386,30 @@
                     <span class="nav-badge">{{ \App\Models\Quiz::where('tenant_id', $activeTenantId)->count() }}</span>
                 </a>
             </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Portals</div>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <a href="{{ route('student.login') }}" class="nav-item" id="nav-student-portal" target="_blank" style="border-left: 2px solid var(--accent); background: rgba(99,102,241,0.05); margin: 0 0.5rem;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent); opacity: 1;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                        <span class="nav-label" style="color: var(--white); font-weight: 600;">Student Portal ↗</span>
+                    </a>
+                    <a href="{{ route('teacher.login') }}" class="nav-item" id="nav-teacher-portal" target="_blank" style="border-left: 2px solid #ffffff; background: rgba(255,255,255,0.05); margin: 0 0.5rem;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #ffffff; opacity: 1;"><path d="M20 17a2 2 0 002-2V4a2 2 0 00-2-2H9.46c.35.61.54 1.3.54 2h10v11h-9v2m4-10H9.46c.35.61.54 1.3.54 2H15v-2M6 7a3 3 0 01-3 3 3 3 0 013 3 3 3 0 01-3-3M2 22h8v-1a4 4 0 00-8 0v1z"/></svg>
+                        <span class="nav-label" style="color: var(--white); font-weight: 600;">Teacher Portal ↗</span>
+                    </a>
+                </div>
+            </div>
         </nav>
 
         <div class="sidebar-footer">
-            <span>© {{ date('Y') }} EduManager</span>
+            <span>© {{ date('Y') }} CodeXpress</span>
+            <form action="{{ route('admin.logout') }}" method="POST" id="logout-form" style="margin-left: auto;">
+                @csrf
+                <button type="submit" class="logout-btn" title="Logout">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                </button>
+            </form>
         </div>
     </aside>
 
@@ -314,7 +461,7 @@
             @yield('content')
         </main>
 
-        <footer class="page-footer">EduManager — Student Management System © {{ date('Y') }}</footer>
+        <footer class="page-footer">CodeXpress — Student Management System © {{ date('Y') }}</footer>
     </div>
 
     <!-- SweetAlert2 JS -->
@@ -535,9 +682,19 @@
         }
         @media(max-width:480px){
             .chat-window {
-                width: calc(100vw - 32px);
-                right: -8px;
+                position: fixed;
+                width: 100vw;
+                height: 100vh;
+                bottom: 0;
+                right: 0;
+                border-radius: 0;
+                border: none;
+                transform: translateY(100%);
             }
+            .chat-widget.open .chat-window {
+                transform: translateY(0);
+            }
+            .chat-header { border-radius: 0; }
         }
     </style>
 

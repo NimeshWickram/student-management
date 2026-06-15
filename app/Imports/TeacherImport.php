@@ -113,6 +113,11 @@ class TeacherImport
             'mobile'     => 'phone_number',
             'subject'    => 'subject',
             'department' => 'subject',
+            'salutation' => 'salutation',
+            'title'      => 'salutation',
+            'prefix'     => 'salutation',
+            'gender'     => 'gender',
+            'sex'        => 'gender',
         ];
 
         $data = [];

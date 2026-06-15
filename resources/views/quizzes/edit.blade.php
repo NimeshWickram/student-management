@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'Edit MCQ Quiz — EduManager')
+@section('title', 'Edit MCQ Quiz — CodeXpress')
 @section('page-title', 'Edit MCQ Quiz')
 @section('breadcrumb')<a href="{{ route('dashboard') }}">Home</a> / <a href="{{ route('quizzes.index') }}">Quizzes</a> / Edit Quiz @endsection
 

@@ -1,5 +1,5 @@
 @extends('layouts.layout')
-@section('title', 'Subjects — EduManager')
+@section('title', 'Subjects — CodeXpress')
 @section('page-title', 'Subjects')
 @section('breadcrumb')<a href="{{ route('dashboard') }}">Home</a> / Subjects @endsection
 
@@ -133,23 +133,26 @@ tbody td{padding:.8rem 1rem;font-size:.85rem;color:var(--g700)}
 
 <div class="table-wrap">
 @if($subjects->count())
-<table id="subjects-table"><thead><tr><th>#</th><th>Name</th><th>Code</th><th>Description</th><th>Credits</th><th>Added</th><th>Actions</th></tr></thead>
+<div class="table-responsive">
+<table id="subjects-table"><thead><tr><th>#</th><th>Subject ID</th><th>Name</th><th>Code</th><th>Description</th><th>Credits</th><th>Added</th><th>Actions</th></tr></thead>
 <tbody>
 @foreach($subjects as $i => $s)
 <tr>
-    <td>{{ $subjects->firstItem()+$i }}</td>
-    <td class="s-name">{{ $s->name }}</td>
-    <td><span class="badge-code">{{ $s->code }}</span></td>
-    <td class="desc-cell">{{ $s->description ?: '—' }}</td>
-    <td><span class="badge-credits">{{ $s->credits }} cr</span></td>
-    <td>{{ $s->created_at->format('d M Y') }}</td>
-    <td><div class="actions">
+    <td data-label="#">{{ $subjects->firstItem()+$i }}</td>
+    <td data-label="Subject ID"><span class="badge" style="background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd;font-family:monospace;font-weight:700;letter-spacing:.03em;font-size:.75rem">{{ $s->subject_id ?? 'N/A' }}</span></td>
+    <td data-label="Name" class="s-name">{{ $s->name }}</td>
+    <td data-label="Code"><span class="badge-code">{{ $s->code }}</span></td>
+    <td data-label="Description" class="desc-cell">{{ $s->description ?: '—' }}</td>
+    <td data-label="Credits"><span class="badge-credits">{{ $s->credits }} cr</span></td>
+    <td data-label="Added">{{ $s->created_at->format('d M Y') }}</td>
+    <td data-label="Actions"><div class="actions">
         <button type="button" class="btn-edit" onclick="openEditSubject({{ $s->id }},{{ json_encode($s->name) }},{{ json_encode($s->code) }},{{ json_encode($s->description) }},{{ $s->credits }})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>
         <form action="{{ route('subjects.destroy',$s) }}" method="POST" class="delete-form">@csrf @method('DELETE')<button type="submit" class="btn-delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>Delete</button></form>
     </div></td>
 </tr>
 @endforeach
 </tbody></table>
+</div>
 @else
 <div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><h3>No subjects found</h3><p>{{ request('search') ? 'Try adjusting your search.' : 'Add your first subject.' }}</p></div>
 @endif

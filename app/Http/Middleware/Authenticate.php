@@ -9,14 +9,16 @@ class Authenticate extends Middleware
 {
     protected function redirectTo(Request $request): ?string
     {
-        if ($request->expectsJson()) {
-            return null;
+        if (!$request->expectsJson()) {
+            // Check which guard is being used
+            if ($request->is('teacher/*')) {
+                return route('teacher.login');
+            }
+            if ($request->is('student/*')) {
+                return route('student.login');
+            }
+            return route('admin.login');
         }
-        
-        if ($request->is('student') || $request->is('student/*')) {
-            return route('student.login');
-        }
-
-        return route('student.login');
+        return null;
     }
 }

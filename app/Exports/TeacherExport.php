@@ -51,15 +51,17 @@ class TeacherExport
         $html .= '<head><meta charset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Teachers</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head>';
         $html .= '<body><table border="1">';
         $html .= '<tr style="background-color:#0a0a0a;color:#ffffff;font-weight:bold;font-size:13px">';
-        $html .= '<th>#</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Phone Number</th><th>Subject</th><th>Joined Date</th>';
+        $html .= '<th>#</th><th>Title (Salutation)</th><th>First Name</th><th>Last Name</th><th>Gender</th><th>Email</th><th>Phone Number</th><th>Subject</th><th>Joined Date</th>';
         $html .= '</tr>';
 
         foreach ($teachers as $index => $teacher) {
             $bg = $index % 2 === 0 ? '#ffffff' : '#f5f5f5';
             $html .= "<tr style=\"background-color:{$bg};font-size:12px\">";
             $html .= '<td>' . ($index + 1) . '</td>';
+            $html .= '<td>' . e($teacher->salutation ?? '—') . '</td>';
             $html .= '<td>' . e($teacher->first_name) . '</td>';
             $html .= '<td>' . e($teacher->last_name) . '</td>';
+            $html .= '<td>' . e(ucfirst($teacher->gender ?? '—')) . '</td>';
             $html .= '<td>' . e($teacher->email) . '</td>';
             $html .= '<td>' . e($teacher->phone_number) . '</td>';
             $html .= '<td>' . e($teacher->subject) . '</td>';

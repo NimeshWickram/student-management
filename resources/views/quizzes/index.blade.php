@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'Quizzes — EduManager')
+@section('title', 'Quizzes — CodeXpress')
 @section('page-title', 'Quizzes')
 @section('breadcrumb')<a href="{{ route('dashboard') }}">Home</a> / Quizzes @endsection
 
@@ -67,7 +67,7 @@
     <!-- Quiz Table -->
     <div class="bg-white border-2 border-black rounded shadow-md overflow-hidden">
         @if($quizzes->count())
-        <div class="overflow-x-auto">
+        <div class="table-responsive overflow-x-auto">
             <table class="min-w-full divide-y-2 divide-black">
                 <thead class="bg-black text-white">
                     <tr>
@@ -88,26 +88,26 @@
                         $isManualMcq = in_array($quiz->quiz_type, ['manual_mcq', 'manual', 'mcq']);
                     @endphp
                     <tr class="hover:bg-gray-50 transition duration-150">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-medium">
+                        <td data-label="#" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-medium">
                             {{ $quizzes->firstItem() + $index }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-black">
+                        <td data-label="Quiz Title" class="px-6 py-4 whitespace-nowrap text-sm font-bold text-black">
                             {{ $quiz->title }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-medium">
+                        <td data-label="Teacher" class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-medium">
                             {{ $quiz->teacher ? $quiz->teacher->first_name . ' ' . $quiz->teacher->last_name : 'N/A' }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                        <td data-label="Subject" class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-bold bg-gray-100 border border-gray-300 text-gray-800">
                                 {{ $quiz->subject ? $quiz->subject->name : 'N/A' }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                        <td data-label="Grade" class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-bold bg-black text-white">
                                 {{ $quiz->grade ?? 'Grade 9' }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                        <td data-label="Quiz Type" class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                             @if($isManualMcq)
                                 @if($quiz->pdf_file_path)
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-bold bg-gray-200 text-black border border-gray-400">
@@ -124,7 +124,7 @@
                                 </span>
                             @endif
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-bold">
+                        <td data-label="Total Questions" class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-bold">
                             @if($isManualMcq)
                                 @php
                                     $questions = json_decode($quiz->manual_content, true);
@@ -137,11 +137,11 @@
                                 <span class="text-xs font-bold text-gray-500 uppercase italic">PDF Attachment</span>
                             @endif
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-medium">
+                        <td data-label="Created Date" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-medium">
                             {{ $quiz->created_at->format('d M Y') }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <div class="flex flex-wrap items-center gap-2">
+                        <td data-label="Actions" class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div class="flex flex-wrap items-center gap-2 actions">
                                 @if($isManualMcq)
                                     <button type="button" onclick="showQuizContent({{ json_encode($quiz->title) }}, {{ json_encode($quiz->manual_content) }})" class="inline-flex items-center px-3 py-1 text-xs font-bold uppercase border-2 border-black bg-white text-black hover:bg-black hover:text-white transition duration-150">
                                         <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>

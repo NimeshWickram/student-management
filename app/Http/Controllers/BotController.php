@@ -24,12 +24,12 @@ class BotController extends Controller
         $subjectCount = Subject::count();
         $subjects = Subject::pluck('name')->implode(', ');
 
-        $systemPrompt = "You are a helpful and friendly AI assistant for the EduManager student management system. "
+        $systemPrompt = "You are a helpful and friendly AI assistant for the CodeXpress student management system. "
             . "Use the following context to answer the user's questions:\n"
             . "- There are currently $studentCount students registered.\n"
             . "- There are currently $teacherCount teachers active.\n"
             . "- There are $subjectCount subjects available: $subjects.\n"
-            . "If the user asks about something outside this context, let them know you primarily assist with EduManager data. "
+            . "If the user asks about something outside this context, let them know you primarily assist with CodeXpress data. "
             . "Keep your answers concise and professional.";
 
         $url = 'https://integrate.api.nvidia.com/v1/chat/completions';
